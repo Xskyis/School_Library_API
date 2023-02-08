@@ -6,16 +6,20 @@ const app = express()
 app.use(express.json())
 /** load book's controller */
 const bookController = require(`../controllers/book.controller`)
+const { midOne } = require(`../middlewares/simple-middleware`)
 
 /** create route to get data with method "GET" */
-app.get("/", bookController.getAllBooks)
+app.get("/",[midOne], bookController.getAllBooks)
+
+const { authorize } = require(`../controllers/auth.controller`)
+let { validateBook } = require(`../middlewares/book-validation`)
 
 /** create route to find book
 * using method "POST" and path "find" */
-app.post("/find", bookController.findBook)
-app.post("/", bookController.addBook)
-app.put("/:id", bookController.updateBook)
-app.delete("/:id", bookController.deleteBook)
+app.post("/find", [authorize], bookController.findBook)
+app.post("/", [authorize],[validateBook], bookController.addBook)
+app.put("/:id", [authorize],[validateBook], bookController.updateBook)
+app.delete("/:id", [authorize], bookController.deleteBook)
 
 /** export app in order to load in another file */
 module.exports = app
