@@ -9,7 +9,7 @@ app.use(express.json())
 
 /** memuat borrow controller */
 const borrowController = require('../controllers/borrow.controller')
-
+/** load middleware authorize */
 const { authorize } = require(`../controllers/auth.controller`)
 
 /** route tambah pinjam buku */

@@ -1,9 +1,11 @@
 /** load model for `members` table */
 const memberModel = require(`../models/index`).member
 
+/** load member validation */
+const memberValidation = require(`../middlewares/member-validation`)
+
 /** load Operation from Sequelize */
 const Op = require(`sequelize`).Op
-
 const path = require('path')
 const fs = require('fs')
 
@@ -55,6 +57,16 @@ exports.addMember = (request, response) => {
                 message: `Nothing to Upload`
             })
         }
+
+        /** proses validasi */
+        let resultValidation = memberValidation(request)
+        if (! resultValidation.status) {  
+            return response.json({  
+                status: false,
+                message: resultValidation.message
+            })
+        }
+
         /** prepare data from request */
         let newMember = {
             name: request.body.name,

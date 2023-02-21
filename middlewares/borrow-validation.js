@@ -1,21 +1,16 @@
-const Joi = require(`joi`)
-const PasswordComplexity = require("joi-password-complexity")
+const Joi = require(`joi`).extend(require('@joi/date'));
 
 /** membuat fungsi utk validasi request dari member */
-const validateAdmin = (request, response, next) => {  
+const validateBorrow = (request, response, next) => {  
     const rules = Joi
         .object()
         .keys({ 
-            /** name is required */
-            name: Joi.string().required(),
-            address: Joi.string().required(),
-            contact: Joi.number().required(),
-            username: Joi.required(),
-            password: new PasswordComplexity({      
-                min: 8,
-                max: 25,
-                upperCase: 1,
-            })
+            memberID: Joi.required(),
+            adminID: Joi.required(),
+            date_of_borrow: Joi.date().format(['YYYY-MM-DD', 'DD-MM-YYYY']).required(),
+            date_of_return: Joi.required(),
+            details_of_borrow: Joi.required(),
+            status: Joi.required()
         })
         .options({ abortEarly: false })
     
@@ -38,4 +33,4 @@ const validateAdmin = (request, response, next) => {
     next()
 }
 
-module.exports = { validateAdmin }
+module.exports = { validateBorrow }

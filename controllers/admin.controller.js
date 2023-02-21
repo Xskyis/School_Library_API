@@ -6,7 +6,7 @@ const Op = require(`sequelize`).Op
 
 /** load md 5 */
 const md5 = require(`md5`)
-let password = md5(`password`)
+
 
 /** create function for read all data */
 exports.getAllAdmin = async (request, response) => {
@@ -57,14 +57,16 @@ exports.addAdmin = (request, response) => {
     /** execute inserting data to member's table */
     adminModel.create(newAdmin)
         .then(result => {
-/** if insert's process success */ return response.json({
+        /** if insert's process success */ 
+        return response.json({
             success: true,
             data: result,
             message: `New admin has been inserted`
         })
         })
         .catch(error => {
-/** if insert's process fail */ return response.json({
+    /** if insert's process fail */
+         return response.json({
             success: false,
             message: error.message
         })

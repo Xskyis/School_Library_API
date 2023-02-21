@@ -2,7 +2,7 @@
 const Joi = require(`joi`)
 
 /** membuat fungsi utk validasi request dari member */
-const validateMember = (request, response, next) => {  
+const validateMember = (request) => {  
     const rules = Joi
         .object()
         .keys({ 
@@ -10,8 +10,8 @@ const validateMember = (request, response, next) => {
             name: Joi.string().required(),
             address: Joi.string().required(),
             contact: Joi.number().required(),
-            /** gender hanya boleh "male" atau "female" no gay */
-            gender: Joi.string().valid(`Male`, `Female`),
+            /** gender hanya boleh "male" atau "female" */
+            gender: Joi.string().valid(`Male`, `Female`)
         })
         .options({ abortEarly: false })
     
@@ -20,18 +20,19 @@ const validateMember = (request, response, next) => {
 
     /** if error is exist */
     if (error != null) {
-        /** gett all error message */
+        /** get all error message */
         let errMessage = error.details.map(it => it.message).join(",")
         
-        /** return error message with code 422 */
-        return response.status(422).json({  
-            success: false,
+        return {    
+            status: false,
             message: errMessage
-        })
+        }
     }
 
     /** if error doesn`t exist, continue to controller */
-    next()
+    return {    
+        status: true
+    }
 }
 
-module.exports = { validateMember }
+module.exports = validateMember

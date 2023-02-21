@@ -1,8 +1,7 @@
 const Joi = require(`joi`)
 
-
 /** membuat fungsi utk validasi request dari member */
-const validateBook = (request, response, next) => {  
+const validateBook = (request) => {  
     const rules = Joi
         .object()
         .keys({ 
@@ -11,7 +10,7 @@ const validateBook = (request, response, next) => {
             author: Joi.string().required(),
             publisher: Joi.string().required(),
             category: Joi.string().required(),
-            stock: Joi.number().required(),
+            stock: Joi.number().required()
         })
         .options({ abortEarly: false })
     
@@ -24,14 +23,16 @@ const validateBook = (request, response, next) => {
         let errMessage = error.details.map(it => it.message).join(",")
         
         /** return error message with code 422 */
-        return response.status(422).json({  
+        return {  
             success: false,
             message: errMessage
-        })
+        }
     }
 
-    /** if error doesn`t exist, continue to controller */
-    next()
+    /** if error doesnt exist */
+    return {    
+        status: true
+    }
 }
 
-module.exports = { validateBook }
+module.exports = validateBook 

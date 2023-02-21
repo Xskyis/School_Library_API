@@ -12,13 +12,12 @@ const { midOne } = require(`../middlewares/simple-middleware`)
 app.get("/",[midOne], bookController.getAllBooks)
 
 const { authorize } = require(`../controllers/auth.controller`)
-let { validateBook } = require(`../middlewares/book-validation`)
 
 /** create route to find book
 * using method "POST" and path "find" */
 app.post("/find", [authorize], bookController.findBook)
-app.post("/", [authorize],[validateBook], bookController.addBook)
-app.put("/:id", [authorize],[validateBook], bookController.updateBook)
+app.post("/", [authorize], bookController.addBook)
+app.put("/:id", [authorize], bookController.updateBook)
 app.delete("/:id", [authorize], bookController.deleteBook)
 
 /** export app in order to load in another file */

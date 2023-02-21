@@ -8,6 +8,9 @@ const Op = require(`sequelize`).Op
 const path = require(`path`)
 const fs = require(`fs`)
 
+/** load book validation */
+const bookValidation = require(`../middlewares/book-validation`)
+
 /** load function from `upload-cover`
 * single(`cover`) means just upload one file
 * with request name `cover`
@@ -58,11 +61,22 @@ exports.addBook = (request, response) => {
             return response.json({ message: error })
         }
         /** check if file is empty */
-        if (request.file) {
+        if (!request.file) {
             return response.json({
                 message: `Nothing to Upload`
             })
         }
+
+        
+        /** proses validasi */
+        let resultValidation = bookValidation(request)
+        if (! resultValidation.status) {
+            return response.json({  
+                status: false,
+                message: resultValidation.message
+            })
+        }
+
         /** prepare data from request */
         let newBook = {
             isbn: request.body.isbn,
